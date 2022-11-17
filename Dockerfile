@@ -1,7 +1,7 @@
 FROM php:7.4-fpm-buster
 ARG TIMEZONE
 
-COPY conf/php.ini /usr/local/etc/php/conf.d/docker-php-config.ini
+COPY docker/php.ini /usr/local/etc/php/conf.d/docker-php-config.ini
 
 RUN apt-get update && apt-get install -y \
     gnupg \
@@ -30,3 +30,5 @@ RUN docker-php-ext-install \
 RUN ln -snf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && echo ${TIMEZONE} > /etc/timezone \
     && printf '[PHP]\ndate.timezone = "%s"\n', ${TIMEZONE} > /usr/local/etc/php/conf.d/tzone.ini \
     && "date"
+
+COPY . /app
