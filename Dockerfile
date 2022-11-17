@@ -1,7 +1,7 @@
 FROM php:7.4-fpm-buster
 ARG TIMEZONE
 
-COPY docker/php.ini /usr/local/etc/php/conf.d/docker-php-config.ini
+COPY conf/php.ini /usr/local/etc/php/conf.d/docker-php-config.ini
 
 RUN apt-get update && apt-get install -y \
     gnupg \

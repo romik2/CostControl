@@ -2,48 +2,48 @@ version: '3'
 
 services:
 ###> doctrine/doctrine-bundle ###
-  database:
-    container_name: database
+  database_cost_control:
+    container_name: database_cost_control
     image: mysql:8.0
     command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_ROOT_PASSWORD: secret
       MYSQL_DATABASE: tool
     ports:
-      - '4060:3306'
+      - '4061:3306'
     volumes:
       - ./mysql:/var/lib/mysql
 ###< doctrine/doctrine-bundle ###
 ###> nginx ###
-  nginx:
-    container_name: nginx
+  nginx_cost_control:
+    container_name: nginx_cost_control
     image: nginx:stable-alpine
     ports:
-      - '8080:80'
+      - '8081:80'
     volumes:
       - ./:/app
-      - ./docker/default.conf:/etc/nginx/conf.d/default.conf
+      - ./conf/default.conf:/etc/nginx/conf.d/default.conf
     depends_on:
-      - php
-      - database
-      - composer
+      - php_cost_control
+      - database_cost_control
+      - composer_cost_control
 ###< nginx ###
 ###> composer ###
-  composer:
-    container_name: composer
+  composer_cost_control:
+    container_name: composer_cost_control
     image: composer:2
     command: composer install --ignore-platform-reqs
     volumes:
       - ./:/app
 ###< composer ###
 ###> php:7.4-fpm ###
-  php:
-    container_name: php
+  php_cost_control:
+    container_name: php_cost_control
     build:
       context: .
     ports:
-      - '9000:9000'
+      - '9002:9000'
     depends_on:
-      - database
-      - composer
+      - database_cost_control
+      - composer_cost_control
 ###< php:7.4-fpm ###
